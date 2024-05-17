@@ -1,0 +1,43 @@
+type Query {
+    pets: [Pet]
+    findPets(filter: SearchFilter!) : [Pet]
+    pet(id: ID!) : Pet
+}
+
+type Mutation {
+    changePetName(id: ID!, newName: String!): PetPayload
+}
+
+input SearchFilter {
+    name: String
+    ownerId: String
+}
+
+interface Pet {
+    id: ID!
+    name: String
+    owner: Person
+}
+
+type Dog implements Pet {
+    id: ID!
+    name: String
+    owner: Person
+    doesBark: Boolean
+}
+
+type Cat implements Pet {
+    id: ID!
+    name: String
+    owner: Person
+    doesMeow: Boolean
+}
+
+type Person {
+    firstName: String
+    lastName: String
+}
+
+type PetPayload {
+    pet: Pet
+}
