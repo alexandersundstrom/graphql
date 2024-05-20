@@ -11,15 +11,21 @@ public class EndpointInterceptor implements WebGraphQlInterceptor {
     @Override
     public Mono<WebGraphQlResponse> intercept(WebGraphQlRequest request, Chain chain) {
 
-        boolean hasAccess = request.getHeaders().containsKey("request-id");
+        boolean hasAccess = request.getHeaders().containsKey("requestId");
         if (hasAccess) {
             request.configureExecutionInput((executionInput, builder) -> {
                 executionInput
                         .getGraphQLContext()
-                        .put("access-key", "granted"); //Add to GraphQLContext
+                        .put("requestId", true); //Add to GraphQLContext
                 return executionInput;
             });
         }
+        request.configureExecutionInput((executionInput, builder) -> {
+            executionInput
+                    .getGraphQLContext()
+                    .put("accessKey", "granted"); //Add to GraphQLContext
+            return executionInput;
+        });
 
         return chain.next(request)
                .map(response -> {

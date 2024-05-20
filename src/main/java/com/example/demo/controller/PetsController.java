@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
+import graphql.GraphQLContext;
 import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
@@ -23,7 +24,7 @@ public class PetsController {
                     new Person("2", "Anna", "Sundström")));
 
     @QueryMapping
-    public List<Pet> pets() {
+    public List<Pet> pets(GraphQLContext context, @ContextValue String accessKey) {
         return petsList;
     }
 
