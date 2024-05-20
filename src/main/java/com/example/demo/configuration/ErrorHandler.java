@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ErrorHandler extends DataFetcherExceptionResolverAdapter {
-    @Override
-    protected GraphQLError resolveToSingleError(Throwable exception, DataFetchingEnvironment environment) {
-        return GraphqlErrorBuilder.newError(environment)
-                .errorType(ErrorType.INTERNAL_ERROR)
-                .message("Something unexpected happened")
-                .build();
-    }
+   // @Override
+   // protected GraphQLError resolveToSingleError(Throwable exception, DataFetchingEnvironment environment) {
+     //   return GraphqlErrorBuilder.newError(environment)
+       //         .errorType(ErrorType.INTERNAL_ERROR)
+         //       .message("Something unexpected happened")
+           //     .build();
+    //}
 }
