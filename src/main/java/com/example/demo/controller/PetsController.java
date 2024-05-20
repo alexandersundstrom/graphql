@@ -1,12 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
-import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SchemaMapping;
+import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +54,13 @@ public class PetsController {
         petsList.remove(petById);
 
         return new PetPayload(updatedPet);
+    }
+
+    @SubscriptionMapping
+    Flux<String> hello() {
+        Flux<Integer> interval = Flux.fromIterable(List.of(0,1,2))
+                .delayElements(Duration.ofSeconds(1));
+        return interval.map(integer -> "Hello"  + integer);
     }
 
     @SchemaMapping(typeName = "Dog", field = "owner")

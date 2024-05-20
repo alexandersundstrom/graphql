@@ -8,6 +8,10 @@ type Mutation {
     changePetName(id: ID!, newName: String!): PetPayload
 }
 
+type Subscription {
+    hello: String
+}
+
 input SearchFilter {
     name: String
     ownerId: String
