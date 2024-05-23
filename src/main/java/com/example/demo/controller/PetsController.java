@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
+import com.example.demo.util.DirectiveUtil;
 import graphql.GraphQLContext;
 import graphql.execution.directives.QueryAppliedDirective;
 import graphql.execution.directives.QueryAppliedDirectiveArgument;
@@ -14,6 +15,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static com.example.demo.util.DirectiveUtil.getDirective;
 
 @Controller
 public class PetsController {
@@ -29,14 +32,8 @@ public class PetsController {
 
     @QueryMapping
     public List<Pet> pets(GraphQLContext context, @ContextValue String accessKey, DataFetchingEnvironment env) {
-        QueryDirectives queryDirectives= env.getQueryDirectives();
-        List<QueryAppliedDirective> cacheDirectives = queryDirectives.getImmediateAppliedDirective("cache");
-        if (cacheDirectives.size() > 0) {
-            QueryAppliedDirective cache = cacheDirectives.get(0);
-            QueryAppliedDirectiveArgument maxArgument = cache.getArgument("maxAge");
-            int maxAge = maxArgument.getValue();
-        }
-
+        Integer cache = getDirective(env, "cache", "maxAge");
+        String instruction = getDirective(env, "instruction", "instruction");
         return petsList;
     }
 

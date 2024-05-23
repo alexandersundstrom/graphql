@@ -48,3 +48,4 @@ type PetPayload {
 }
 
 directive @cache(maxAge: Int) on FIELD
+directive @instruction(instruction: String) on FIELD
