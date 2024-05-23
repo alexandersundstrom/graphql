@@ -2,6 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.model.*;
 import graphql.GraphQLContext;
+import graphql.execution.directives.QueryAppliedDirective;
+import graphql.execution.directives.QueryAppliedDirectiveArgument;
+import graphql.execution.directives.QueryDirectives;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
@@ -24,7 +28,15 @@ public class PetsController {
                     new Person("2", "Anna", "Sundström")));
 
     @QueryMapping
-    public List<Pet> pets(GraphQLContext context, @ContextValue String accessKey) {
+    public List<Pet> pets(GraphQLContext context, @ContextValue String accessKey, DataFetchingEnvironment env) {
+        QueryDirectives queryDirectives= env.getQueryDirectives();
+        List<QueryAppliedDirective> cacheDirectives = queryDirectives.getImmediateAppliedDirective("cache");
+        if (cacheDirectives.size() > 0) {
+            QueryAppliedDirective cache = cacheDirectives.get(0);
+            QueryAppliedDirectiveArgument maxArgument = cache.getArgument("maxAge");
+            int maxAge = maxArgument.getValue();
+        }
+
         return petsList;
     }
 

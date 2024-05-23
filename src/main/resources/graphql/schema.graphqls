@@ -2,6 +2,7 @@ type Query {
     pets: [Pet]
     findPets(filter: SearchFilter!) : [Pet]
     pet(id: ID!) : Pet
+    findByOwners(owners: [String]!) : [Pet]
 }
 
 type Mutation {
@@ -45,3 +46,5 @@ type Person {
 type PetPayload {
     pet: Pet
 }
+
+directive @cache(maxAge: Int) on FIELD
