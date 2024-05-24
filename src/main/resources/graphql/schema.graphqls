@@ -41,6 +41,7 @@ type Cat implements Pet {
 type Person {
     firstName: String
     lastName: String
+    bestFriend: Person
 }
 
 type PetPayload {

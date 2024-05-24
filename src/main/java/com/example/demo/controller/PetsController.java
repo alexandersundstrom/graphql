@@ -1,11 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
-import com.example.demo.util.DirectiveUtil;
 import graphql.GraphQLContext;
-import graphql.execution.directives.QueryAppliedDirective;
-import graphql.execution.directives.QueryAppliedDirectiveArgument;
-import graphql.execution.directives.QueryDirectives;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.graphql.data.method.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -27,8 +23,8 @@ public class PetsController {
                     new Dog("Fido", "1", 3, false)));
 
     private List<Person> owners = new ArrayList<>(
-            List.of(new Person("1", "Alexander", "Sundström"),
-                    new Person("2", "Anna", "Sundström")));
+            List.of(new Person("1", "Alexander", "Sundström", "2"),
+                    new Person("2", "Anna", "Sundström", "1")));
 
     @QueryMapping
     public List<Pet> pets(GraphQLContext context, @ContextValue String accessKey, DataFetchingEnvironment env) {
@@ -68,9 +64,9 @@ public class PetsController {
 
     @SubscriptionMapping
     Flux<String> hello() {
-        Flux<Integer> interval = Flux.fromIterable(List.of(0,1,2))
+        Flux<Integer> interval = Flux.fromIterable(List.of(0, 1, 2))
                 .delayElements(Duration.ofSeconds(1));
-        return interval.map(integer -> "Hello"  + integer);
+        return interval.map(integer -> "Hello" + integer);
     }
 
     @SchemaMapping(typeName = "Dog", field = "owner")
@@ -87,5 +83,15 @@ public class PetsController {
                 .filter(owner -> cat.ownerId().equals(owner.id()))
                 .findAny()
                 .orElse(null);
+    }
+
+    @BatchMapping
+    List<Person> bestFriend(List<Person> peoples) {
+       return peoples.stream()
+            .map(people -> owners.stream()
+                    .filter(owner -> people.bestFriendId().equals(owner.id()))
+                    .findFirst()
+                    .orElseThrow(() ->new RuntimeException("Person could not be found!")))
+                .toList();
     }
 }
