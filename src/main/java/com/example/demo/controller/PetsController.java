@@ -68,13 +68,6 @@ public class PetsController {
         return new PetPayload(updatedPet);
     }
 
-    @SubscriptionMapping
-    Flux<String> hello() {
-        Flux<Integer> interval = Flux.fromIterable(List.of(0, 1, 2))
-                .delayElements(Duration.ofSeconds(1));
-        return interval.map(integer -> "Hello" + integer);
-    }
-
     @SchemaMapping(typeName = "Dog", field = "owner")
     public Person owner(Dog dog) {
         return personService.getAllPersons().stream()
