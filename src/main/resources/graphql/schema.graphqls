@@ -3,6 +3,7 @@ type Query {
     findPets(filter: SearchFilter!) : [Pet]
     pet(id: ID!) : Pet
     findByOwners(owners: [String]!) : [Pet]
+    hello: String
 }
 
 type Mutation {
