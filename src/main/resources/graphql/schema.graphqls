@@ -4,10 +4,14 @@ type Query {
     pet(id: ID!) : Pet
     findByOwners(owners: [String]!) : [Pet]
     hello: String
+    # Only logged in users can query Orders
+    myOrders: [Order]
 }
 
 type Mutation {
     changePetName(id: ID!, newName: String!): PetPayload
+    # Only admins can delete
+    deleteOrder(input: DeleteOrderInput!) : DeleteOrderPayload
 }
 
 type Subscription {
@@ -19,10 +23,19 @@ input SearchFilter {
     ownerId: String
 }
 
+input DeleteOrderInput {
+    orderId: ID
+}
+
+
 interface Pet {
     id: ID!
     name: String
     owner: Person
+}
+
+type DeleteOrderPayload {
+    success: Boolean
 }
 
 type Dog implements Pet {
@@ -47,6 +60,11 @@ type Person {
 
 type PetPayload {
     pet: Pet
+}
+
+type Order {
+    id: ID
+    details: String
 }
 
 directive @cache(maxAge: Int) on FIELD
